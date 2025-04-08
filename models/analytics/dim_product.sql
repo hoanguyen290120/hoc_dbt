@@ -16,10 +16,18 @@ stock_item_name as product_name,
 brand as brand_name
 FROM 
 dim_product_source
-)
-
+),
+dim_produtc_cast_type  AS
+(
 SELECT  
 CAST(product_key AS INTEGER) as product_key,
 CAST(product_name AS STRING) as product_name,
 CAST (brand_name as STRING ) as brand_name
 FROM dim_product_renname_column
+)
+SELECT
+product_key,
+product_name,
+brand_name
+FROM 
+dim_produtc_cast_type
