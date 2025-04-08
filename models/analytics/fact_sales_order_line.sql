@@ -34,11 +34,14 @@ FROM
 sales_order_line_rename_column
 )
 SELECT 
-sales_order_line_key,
-sales_order_key,
-product_key,
-quantity,
-unit_price,
-unit_price*quantity as gross_amount
+fact_line.sales_order_line_key,
+fact_line.sales_order_key,
+fact_header.customer_key,
+fact_line.product_key,
+fact_line.quantity,
+fact_line.unit_price,
+fact_line.unit_price * fact_line.quantity as gross_amount
 FROM 
-fact_sales_order_line_change_type
+fact_sales_order_line_change_type AS fact_line
+LEFT JOIN {{ref('stg_fact_sales_order')}} as fact_header --bảng này từ tạo straging
+ON fact_line.sales_order_key = fact_header.sales_order_key
