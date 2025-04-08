@@ -13,6 +13,7 @@ sales_order_line_rename_column AS
 
   SELECT
   order_line_id as sales_order_line_key ,
+  order_id as sales_order_key,
   stock_item_id as product_key,
   quantity as quantity,
   unit_price as unit_price,
@@ -25,6 +26,7 @@ fact_sales_order_line_change_type AS
 (
 SELECT
 CAST( sales_order_line_key AS INTEGER) as sales_order_line_key,
+CAST(sales_order_key AS INTEGER) as sales_order_key,
 CAST (product_key AS INTEGER) as product_key,
  CAST(quantity AS INTEGER) as quantity,
 CAST(unit_price AS NUMERIC) as unit_price
@@ -33,6 +35,7 @@ sales_order_line_rename_column
 )
 SELECT 
 sales_order_line_key,
+sales_order_key,
 product_key,
 quantity,
 unit_price,
