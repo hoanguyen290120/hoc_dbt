@@ -17,9 +17,25 @@ dim_buying_group_change_type AS
   CAST (buying_group_name AS STRING) AS buying_group_name
   FROM  
   dim_buying_group_rename_column
+),
+dim_buying_group_add_undefined AS 
+(
+  SELECT 
+  buying_group_key,
+  buying_group_name
+  FROM 
+  dim_buying_group_change_type
+UNION ALL
+  SELECT 
+  0 AS buying_group_key,
+  'Undefined' AS buying_group_name
+  UNION ALL
+SELECT 
+  -1 AS buying_group_key,
+  'Invalid' AS buying_group_name
 )
 SELECT 
 buying_group_key,
 buying_group_name
 FROM  
-dim_buying_group_change_type
+dim_buying_group_add_undefined

@@ -1,42 +1,44 @@
 --B1: Đổi source lấy data
 WITH fact_sales_order_line_source AS
-(
-SELECT
- * 
-FROM 
-`vit-lam-data.wide_world_importers.sales__order_lines`
-),
+  (
+  SELECT
+  * 
+  FROM 
+  `vit-lam-data.wide_world_importers.sales__order_lines`
+  ),
 
 --Đổi cột
 sales_order_line_rename_column AS
-(
+  (
 
-  SELECT
-  order_line_id as sales_order_line_key ,
-  order_id as sales_order_key,
-  stock_item_id as product_key,
-  quantity as quantity,
-  unit_price as unit_price,
-  FROM 
-  fact_sales_order_line_source
-),
+    SELECT
+    order_line_id as sales_order_line_key ,
+    order_id as sales_order_key,
+    stock_item_id as product_key,
+    quantity as quantity,
+    unit_price as unit_price,
+    FROM 
+    fact_sales_order_line_source
+  ),
 
 --B3: Chuyển type
 fact_sales_order_line_change_type AS
-(
-SELECT
-CAST( sales_order_line_key AS INTEGER) as sales_order_line_key,
-CAST(sales_order_key AS INTEGER) as sales_order_key,
-CAST (product_key AS INTEGER) as product_key,
- CAST(quantity AS INTEGER) as quantity,
-CAST(unit_price AS NUMERIC) as unit_price
-FROM
-sales_order_line_rename_column
-)
+  (
+  SELECT
+  CAST( sales_order_line_key AS INTEGER) as sales_order_line_key,
+  CAST(sales_order_key AS INTEGER) as sales_order_key,
+  CAST (product_key AS INTEGER) as product_key,
+  CAST(quantity AS INTEGER) as quantity,
+  CAST(unit_price AS NUMERIC) as unit_price
+  FROM
+  sales_order_line_rename_column
+  )
 SELECT 
+fact_header.order_date,
 fact_line.sales_order_line_key,
 fact_line.sales_order_key,
-fact_header.customer_key,
+COALESCE(fact_header.customer_key,-1) as customer_key,
+COALESCE(fact_header.picked_by_person_key,-1) as picked_by_person_key,
 fact_line.product_key,
 fact_line.quantity,
 fact_line.unit_price,
