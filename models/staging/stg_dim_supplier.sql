@@ -21,6 +21,23 @@ CAST(supplier_key AS INTEGER) AS supplier_key,
 CAST (supplier_name AS STRING ) AS supplier_name
 FROM 
 purchasing_suppliers_rename_colum
+),
+add_purchasing_suppliers_undefined AS 
+(
+  
+    SELECT 
+    supplier_key,
+    supplier_name
+    FROM 
+    purchasing_suppliers_change_type
+UNION ALL
+    SELECT  
+    0 as supplier_key,
+    'Undefined' as supplier_name
+UNION ALL
+    SELECT 
+    -1 as supplier_key,
+    'Invalid' as supplier_name
 )
 SELECT
 supplier_key,
